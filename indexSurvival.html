@@ -38,6 +38,7 @@
 	<div id='field'></div>
 	<div id='mods'></div>
 	<div id="text-log"></div>
+	<div id="mobsLeft"></div>
 	<div id="fade-out"></div>
 	<div id="health-bg"></div>
 	<div id="health"></div>
@@ -90,11 +91,6 @@
 	<div style="position: absolute; top:0;right:0;">
 		<div id="pause-grid-right" class="pause-grid"></div>
 	</div>
-	<svg class="SVG-button" id="build-button" width="110" height="40">
-		<g stroke='none' fill='#333' stroke-width="2" font-size="28px" font-family="Arial, sans-serif">
-			<text x="10" y="30">custom</text>
-		</g>
-	</svg>
 	<div id='info'>
 		<div id="settings">
 			<details>
@@ -103,8 +99,8 @@
 
 					<label for="game mode" title="change the game mode to survival written by n-gon player: Francois">n-gon mode:</label>
 					<select name="game mode" id="game mode" onChange="window.location.href=this.value">
-						<option value="index.html">normal mode</option>
 						<option value="indexSurvival.html">survival mode</option>
+						<option value="index.html">normal mode</option>
 					</select>
 					<br>
 					<label for="difficulty-select" title="effects: number of mobs, damage done by mobs, damage done to mobs, mob speed, heal effects">combat difficulty:</label>
@@ -114,12 +110,6 @@
 						<option value="2">hard</option>
 						<option value="4">why...</option>
 					</select>
-					<br>
-					<label for="community-maps" title="adds in 2 maps written by n-gon player: Francois">include community maps:</label>
-					<input type="checkbox" id="community-maps" name="community-maps" style="width:17px; height:17px;">
-					<!-- <br>
-					<label for="body-damage" title="allow damage from the ground and large fast moving blocks">collision damage from blocks:</label>
-					<input type="checkbox" id="body-damage" name="body-damage" checked style="width:17px; height:17px;"> -->
 					<br>
 					<label for="classic-select" title="play older versions of n-gon">classic n-gon:</label>
 					<select name="classic-select" id="classic-select" onChange="window.location.href=this.value">
@@ -535,7 +525,7 @@
 	<script src="js/mods.js"></script>
 	<script src="js/bullet.js"></script>
 	<script src="js/mob.js"></script>
-	<script src= "js/levelNormal.js"></script>
+	<script src= "js/levelSurvival.js"></script>
 	<script src="js/spawn.js"></script>
 	<script src="js/visibility.js"></script>
 	<script src="js/engine.js"></script>

@@ -1,0 +1,267 @@
+index.html 
+
+	<label for="survival mode" title="change the game mode to survival written by n-gon player: Francois">Survival mode:</label>
+	<input type="checkbox" id="survival mode" name="survival mode" style="width:17px; height:17px;">
+	<br>
+
+
+////////////////////////////////////////////////
+
+////////////////////////////////////////////////
+
+
+
+
+game.js
+
+	game.mobsLeft();
+
+	/////////////////
+
+	textLog() {
+    if (game.lastLogTime && game.lastLogTime < mech.cycle) {
+      game.lastLogTime = 0;
+      game.replaceTextLog = true
+      // document.getElementById("text-log").innerHTML = " ";
+      document.getElementById("text-log").style.opacity = 0;
+	    }
+	},
+	makeNumberMobsLeft(text, time = 180) {
+	    if (game.replaceMobLog) {
+	      document.getElementById("mobsLeft").innerHTML = text;
+	      document.getElementById("mobsLeft").style.opacity = 1;
+	      game.mobLastLogTime = mech.cycle + time;
+	   }
+	},
+	mobsLeft() {
+	  if (game.mobLastLogTime && game.mobLastLogTime < mech.cycle) {
+	    game.mobLastLogTime = 0;
+	    game.replaceMobLog = true
+	    document.getElementById("mobsLeft").style.opacity = 0;
+	  }
+	},
+
+	/////////////////
+
+	if (game.isSurvivalMode === true){
+      game.difficulty = 1;
+    } else {
+      game.difficulty = 0;
+    }
+
+	/////////////////
+
+
+
+	/////////////////
+
+
+	isSurvivalMode : false,
+    if (game.isSurvivalMode || game.testing){
+      if (keys[79]) {
+        game.isAutoZoom = false;
+        game.zoomScale /= 0.9;
+        game.setZoom();
+      } else if (keys[73]) {
+        game.isAutoZoom = false;
+        game.zoomScale *= 0.9;
+        game.setZoom();
+      }
+    }
+
+    /////////////////
+
+    if (game.isSurvivalMode != true){
+        level.nextLevel();
+    }
+
+    /////////////////
+
+    if (game.isSurvivalMode !=true){
+      document.getElementById("build-button").style.display = "none";
+    }
+
+    ///////////////////
+
+
+     if (game.firstRun) {
+      mech.spawn(); //spawns the player
+      if (game.isSurvivalMode) {       
+      } 
+      if (game.isCommunityMaps) {
+          level.levels.push("stronghold", "basement", "house");
+      }
+        level.levels = shuffle(level.levels); //shuffles order of maps
+        level.levels.unshift("bosses"); //add bosses level to the end of the randomized levels list
+    }
+    game.reset();
+    game.firstRun = false;
+
+
+
+////////////////////////////////////////////////
+
+////////////////////////////////////////////////
+
+
+
+index.js
+	
+	
+
+
+	ligne 131
+
+	if(game.isSurvivalMode != true){
+	  document.getElementById("community-maps").addEventListener("input", () => {
+	    game.isCommunityMaps = document.getElementById("community-maps").checked
+	    localSettings.isCommunityMaps = game.isCommunityMaps
+	    localStorage.setItem("localSettings", JSON.stringify(localSettings)); //update local storage
+	  });
+	}
+
+
+//pausegrid 
+
+	<br><strong>fire delay</strong> decrease: ${((1-b.fireCD)*100).toFixed(0)}%
+      <br>
+      <br><strong class='color-r'>rerolls</strong>: ${powerUps.reroll.rerolls}
+      <br><strong class="color-c">coins</strong>: ${powerUps.coin.coins}
+
+////////////////////////////////////////////////
+
+////////////////////////////////////////////////
+
+
+
+powerup.js
+ 
+ 	coin {
+ 	......
+ 	}
+
+NEW levelNormal.js
+
+New level.Survival.js
+
+NEW indexSurvival.html
+
+
+
+////////////////////////////////////////////////
+
+////////////////////////////////////////////////
+
+
+
+player.js
+
+	grabPowerUp() { //look for power ups to grab with field
+	  if ((mech.fieldUpgrades[mech.fieldMode].name === "grabber" && mob.length===0 ) || (mech.fieldUpgrades[mech.fieldMode].name != "grabber") )
+	    for (let i = 0, len = powerUp.length; i < len; ++i) {
+	      const dxP = mech.pos.x - powerUp[i].position.x;
+	      const dyP = mech.pos.y - powerUp[i].position.y;
+	      const dist2 = dxP * dxP + dyP * dyP;
+	      // float towards player  if looking at and in range  or  if very close to player
+	      if (dist2 < mech.grabPowerUpRange2 &&
+	        (mech.lookingAt(powerUp[i]) || dist2 < 16000 || mech.fieldUpgrades[mech.fieldMode].name === "grabber") &&
+	        !(mech.health === mech.maxHealth && powerUp[i].name === "heal") &&
+	        (Matter.Query.ray(map, powerUp[i].position, mech.pos).length === 0 || mech.fieldUpgrades[mech.fieldMode].name === "grabber")
+	      ) {
+	        powerUp[i].force.x += 0.05 * (dxP / Math.sqrt(dist2)) * powerUp[i].mass;
+	        powerUp[i].force.y += 0.05 * (dyP / Math.sqrt(dist2)) * powerUp[i].mass - powerUp[i].mass * game.g; //negate gravity
+	        //extra friction
+	        Matter.Body.setVelocity(powerUp[i], {
+	          x: powerUp[i].velocity.x * 0.11,
+	          y: powerUp[i].velocity.y * 0.11
+	        });
+
+	        if (mech.fieldUpgrades[mech.fieldMode].name === "grabber" && (keys[32] || game.mouseDownRight)){
+	          powerUp[i].collisionFilter.mask = null;
+	        }
+
+	        if (dist2 < 5000 && !game.isChoosing) { //use power up if it is close enough
+	          powerUps.onPickUp(mech.pos);
+	          Matter.Body.setVelocity(player, { //player knock back, after grabbing power up
+	            x: player.velocity.x + ((powerUp[i].velocity.x * powerUp[i].mass) / player.mass) * 0.3,
+	            y: player.velocity.y + ((powerUp[i].velocity.y * powerUp[i].mass) / player.mass) * 0.3
+	          });
+	          powerUp[i].effect();
+	          Matter.World.remove(engine.world, powerUp[i]);
+	          powerUp.splice(i, 1);
+	          return; //because the array order is messed up after splice
+	        }
+	      }
+	    }
+	},
+
+    {
+      name: "grabber",
+      description: "<strong>field emitter</strong> does not drain <strong class='color-f'>energy</strong><br><strong>blocking</strong> has no <strong>cool down</strong> and less <strong>recoil</strong><br><strong>attract</strong> power ups from <strong>far away</strong>",
+
+      effect: () => {
+        mech.fieldShieldingScale = 0;
+        mech.grabPowerUpRange2 = 10000000
+        mech.hold = function () {
+          if (mech.isHolding) {
+            mech.drawHold(mech.holdingTarget);
+            mech.holding();
+            mech.throwBlock();
+          } else if ((keys[32] || game.mouseDownRight && mech.fieldCDcycle < mech.cycle)) { //not hold but field button is pressed
+            mech.grabPowerUp();
+            mech.lookForPickUp();
+            if (mech.energy > 0.05) {
+              mech.drawField();
+              mech.pushMobsFacing();
+              cp1x = mech.pos.x + 100 * mech.fieldRange * Math.cos(mech.angle)
+              cp1y = mech.pos.y + 100 * mech.fieldRange * Math.sin(mech.angle)
+            } 
+            } else if (mech.holdingTarget && mech.fieldCDcycle < mech.cycle) { //holding, but field button is released
+            mech.pickUp();
+          } else {
+            mech.holdingTarget = null; //clears holding target (this is so you only pick up right after the field button is released and a hold target exists)
+            for (let i = 0, len = powerUp.length; i < len; ++i) {
+                powerUp[i].collisionFilter.mask = cat.map || cat.powerUp
+              }
+          }
+          mech.drawFieldMeter()
+        }
+      } //shield grabber
+    },
+
+
+
+////////////////////////////////////////////////
+
+////////////////////////////////////////////////
+
+
+
+style.css
+
+.color-c {
+  color: #d3d615;
+  letter-spacing: 1px;
+}
+
+///////////////////
+
+.coin {
+  background: #fbff29;
+}
+
+//////////////////
+
+#mobsLeft {
+  position: absolute;
+  top: 100px;
+  left: 450px;
+  z-index: 2;
+  font-size: 23px;
+  color: #111;
+  background-color: rgba(255, 255, 255, 0.4);
+  user-select: none;
+  pointer-events: none;
+  padding: 0px 5px 0px 5px;
+  border-radius: 5px;
+}
