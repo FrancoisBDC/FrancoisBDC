@@ -1,6 +1,7 @@
 // redblobgames.com/articles/visibility
 //   https://github.com/Silverwolf90/2d-visibility/tree/master/src
 //   could apply to explosions, neutron bomb, player LOS
+//I am not the developper of this game, you can find the original project here "https://landgreen.github.io/sidescroller/" or his GitHub page here: "https://github.com/landgreen/n-gon"
 
 
 const v = {

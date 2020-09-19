@@ -1,3 +1,5 @@
+//I am not the developper of this game, you can find the original project here "https://landgreen.github.io/sidescroller/" or his GitHub page here: "https://github.com/landgreen/n-gon"
+
 let body = []; //non static bodies
 let map = []; //all static bodies
 let cons = []; //all constraints between a point and a body

@@ -1,5 +1,6 @@
 // game Object ********************************************************
 //*********************************************************************
+//I am not the developper of this game, you can find the original project here "https://landgreen.github.io/sidescroller/" or his GitHub page here: "https://github.com/landgreen/n-gon"
 const game = {
   loop() {}, //main game loop, gets se tto normal or testing loop
   normalLoop() {
